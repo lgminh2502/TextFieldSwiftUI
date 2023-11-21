@@ -60,18 +60,15 @@ struct ContentView: View {
     var body: some View {
         VStack {
             HStack {
-                DidEndEditingTextField(tag: 0, placeholder: Constant.pinCodePlaceholder, limit: Constant.pinCodeCharacterLimit, digitOnly: true, text: $text1, isFocus: $isTextFieldFocus1, triggersFocus: $triggersFocus1, isHovering: $isHovering1, onDeleteBackward: {
+                ESBNSTextField(tag: 0, placeholder: Constant.pinCodePlaceholder, limit: Constant.pinCodeCharacterLimit, digitOnly: true, text: $text1, isFocus: $isTextFieldFocus1, triggersFocus: $triggersFocus1, isHovering: $isHovering1, onDeleteBackward: {
                     print("onDeleteBackward text1")
                 }, shouldMoveToNextFocusWhenReachedLimit: {
                     triggersFocus2 = true
                 })
                 .applyPinCodeStyleModifier(isHover: $isHovering1, isFocusing: $isTextFieldFocus1.wrappedValue)
                 .limitInputLength(value: $text1, length: Constant.pinCodeCharacterLimit)
-//                .onChange(of: isTextFieldFocus1) { newValue in
-//                    print("isTextFieldFocus1 newValue \(newValue)")
-//                }
-                
-                DidEndEditingTextField(tag: 1, placeholder: Constant.pinCodePlaceholder, limit: Constant.pinCodeCharacterLimit, digitOnly: true, text: $text2, isFocus: $isTextFieldFocus2, triggersFocus: $triggersFocus2, isHovering: $isHovering2, onDeleteBackward: {
+
+                ESBNSTextField(tag: 1, placeholder: Constant.pinCodePlaceholder, limit: Constant.pinCodeCharacterLimit, digitOnly: true, text: $text2, isFocus: $isTextFieldFocus2, triggersFocus: $triggersFocus2, isHovering: $isHovering2, onDeleteBackward: {
                     print("onDeleteBackward text1")
                     triggersFocus1 = true
                 }, shouldMoveToNextFocusWhenReachedLimit: {
@@ -191,7 +188,7 @@ struct ContentView: View {
     }
 }
 
-class FocusAwareTextField: NSTextField {
+private class FocusAwareTextField: NSTextField {
     var onFocusChange: (Bool) -> Void = { _ in }
     
     override func becomeFirstResponder() -> Bool {
@@ -202,7 +199,7 @@ class FocusAwareTextField: NSTextField {
     }
 }
 
-struct DidEndEditingTextField: NSViewRepresentable {
+struct ESBNSTextField: NSViewRepresentable {
     let tag: Int
     let placeholder: String
     var limit: Int = -1
@@ -288,9 +285,9 @@ struct DidEndEditingTextField: NSViewRepresentable {
     }
     
     class Coordinator: NSObject, NSTextFieldDelegate {
-        let parent: DidEndEditingTextField
+        let parent: ESBNSTextField
         
-        init(_ textField: DidEndEditingTextField) {
+        init(_ textField: ESBNSTextField) {
             parent = textField
         }
         
