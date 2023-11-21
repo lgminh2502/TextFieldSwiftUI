@@ -8,6 +8,22 @@
 import SwiftUI
 import Combine
 
+extension Color {
+    static let defaultBackgroundColor: String = "#FDFDFD"
+    static let hoverBackgroundColor: String = "#F5F5F6"
+    
+    static let defaultBorderColor: String = "#D4D7DB"
+    static let hoverBorderColor: String = "#C9CDD6"
+    static let selectBorderColor: String = "#3196FF"
+    
+    static let hintTextColor: String = "#C2C2C2"
+    static let hoverTextColor: String = Color.hintTextColor
+    static let dimTextColor: String = Color.hintTextColor
+    
+    static let normalTextColorSelecting: String = "#000000"
+    static let normalTextColorNotSelecting: String = "#000000CC" // 80%
+}
+
 struct ContentView: View {
     @State private var text1: String = ""
     @State private var text2: String = ""
@@ -30,7 +46,11 @@ struct ContentView: View {
     @State var isHovering4: Bool = false
     
     private enum Constant {
-        static let characterLimit = 3
+        static let ipCharacterLimit = 3
+        static let pinCodeCharacterLimit = 1
+        
+        static let ipPlaceholder: String = "000"
+        static let pinCodePlaceholder: String = "N"
     }
     
     func getValidIPValue(_ text: String) -> Int {
@@ -40,11 +60,12 @@ struct ContentView: View {
     var body: some View {
         VStack {
             HStack {
-                DidEndEditingTextField(tag: 0, placeholder: "N", limit: Constant.characterLimit, digitOnly: true, text: $text1, isFocus: $isTextFieldFocus1, triggersFocus: $triggersFocus1, onDeleteBackward: {
+                DidEndEditingTextField(tag: 0, placeholder: Constant.ipPlaceholder, limit: Constant.ipCharacterLimit, digitOnly: true, text: $text1, isFocus: $isTextFieldFocus1, triggersFocus: $triggersFocus1, isHovering: $isHovering1, onDeleteBackward: {
                     print("onDeleteBackward text1")
                 }, shouldMoveToNextFocusWhenReachedLimit: {
                     triggersFocus2 = true
                 })
+                .applyPinCodeModifier(isHover: $isHovering1, isFocusing: $isTextFieldFocus1.wrappedValue)
                 .onChange(of: isTextFieldFocus1) { newValue in
                     print("isTextFieldFocus1 newValue \(newValue)")
                 }
@@ -53,32 +74,14 @@ struct ContentView: View {
                     if newValue.isEmpty {
                         return
                     }
-//                    let value = String(newValue.prefix(3))
-//                    let intValue = Int(value) ?? 0
-//                    let min = min(intValue, 255)
-                    
                     text1 = "\(getValidIPValue(newValue))"
-                    if text1.count == Constant.characterLimit {
+                    if text1.count == Constant.ipCharacterLimit {
                         if !triggersFocus2 {
                             triggersFocus2 = true
                         }
                     }
-                    //          if newValue.count > 3 {
-                    //            let value = String(newValue.prefix(3))
-                    //            let intValue = Int(value) ?? 0
-                    //            let min = min(intValue, 255)
-                    //            text1 = "\(min)"
-                    //            text2 = String(newValue.suffix(1))
-                    //            triggersFocus2 = true
-                    //          } else {
-                    //              let value = String(newValue.prefix(3))
-                    //              let intValue = Int(value) ?? 0
-                    //              let min = min(intValue, 255)
-                    //              text1 = "\(min)"
-                    //          }
                 })
-                .frame(width: 50, height: 50)
-                DidEndEditingTextField(tag: 1, placeholder: "N", limit: Constant.characterLimit, digitOnly: true, text: $text2, isFocus: $isTextFieldFocus2, triggersFocus: $triggersFocus2, onDeleteBackward: {
+                DidEndEditingTextField(tag: 1, placeholder: Constant.ipPlaceholder, limit: Constant.ipCharacterLimit, digitOnly: true, text: $text2, isFocus: $isTextFieldFocus2, triggersFocus: $triggersFocus2, isHovering: $isHovering2, onDeleteBackward: {
                     print("onDeleteBackward text2")
                     triggersFocus1 = true
                 }, shouldMoveToNextFocusWhenReachedLimit: {
@@ -100,8 +103,8 @@ struct ContentView: View {
                     //            triggersFocus3 = true
                     //          }
                 })
-                .frame(width: 50, height: 50)
-                DidEndEditingTextField(tag: 2, placeholder: "N", limit: Constant.characterLimit, digitOnly: true, text: $text3, isFocus: $isTextFieldFocus3, triggersFocus: $triggersFocus3, onDeleteBackward: {
+//                applyPinCodeModifier(isFocusing: triggersFocus2)
+                DidEndEditingTextField(tag: 2, placeholder: Constant.ipPlaceholder, limit: Constant.ipCharacterLimit, digitOnly: true, text: $text3, isFocus: $isTextFieldFocus3, triggersFocus: $triggersFocus3, isHovering: $isHovering3, onDeleteBackward: {
                     print("onDeleteBackward text3")
                     triggersFocus2 = true
                 }, shouldMoveToNextFocusWhenReachedLimit: {
@@ -123,8 +126,8 @@ struct ContentView: View {
                         triggersFocus4 = true
                     }
                 })
-                .frame(width: 50, height: 50)
-                DidEndEditingTextField(tag: 3, placeholder: "N", limit: Constant.characterLimit, digitOnly: true, text: $text4, isFocus: $isTextFieldFocus4, triggersFocus: $triggersFocus4, onDeleteBackward: {
+//                applyPinCodeModifier(isFocusing: triggersFocus3)
+                DidEndEditingTextField(tag: 3, placeholder: Constant.ipPlaceholder, limit: Constant.ipCharacterLimit, digitOnly: true, text: $text4, isFocus: $isTextFieldFocus4, triggersFocus: $triggersFocus4, isHovering: $isHovering4, onDeleteBackward: {
                     print("onDeleteBackward text4")
                     triggersFocus3 = true
                 }, shouldMoveToNextFocusWhenReachedLimit: {
@@ -145,63 +148,27 @@ struct ContentView: View {
                     let min = min(value, 255)
                     text4 = "\(min)"
                 })
-                .frame(width: 50, height: 50)
-                
-                
-                //                DidEndEditingTextField(tag: 0, text: $text1, isHovering: $isHovering1, didEndEditing: { string in
-                //                    print("didEndEditing String \(string)")
-                //                })
-                //                .onChange(of: text1, perform: { newValue in
-                //                    print("newValue \(newValue)")
-                //                })
-                ////                .limitInputLength(value: $text1, length: 3)
-                //                .frame(width: 40, height: 40)
-                //                .overlay(content: {
-                //                    RoundedRectangle(cornerRadius: 8, style: .continuous)
-                //                        .strokeBorder(Color.gray, lineWidth: 1)
-                //                })
-                //                .onHover(perform: { hovering in
-                //                    print("hovering \(hovering)")
-                //                    isHovering1 = hovering
-                //                })
-                //                .background(
-                //                    RoundedRectangle(cornerRadius: 8)
-                //                        .fill(isHovering1 ? .yellow : .white)
-                //                )
-                //                DidEndEditingTextField(tag: 1, text: $text2, isHovering: $isHovering2, didEndEditing: { string in
-                //                    print("didEndEditing String \(string)")
-                //                })
-                ////                .limitInputLength(value: $text2, length: 3)
-                //                .frame(width: 40, height: 40)
-                //                .onHover(perform: { hovering in
-                //                    print("hovering \(hovering)")
-                //                    isHovering2 = hovering
-                //                })
-                //                .background(.green)
-                //                DidEndEditingTextField(tag: 2, text: $text3, isHovering: $isHovering3, didEndEditing: { string in
-                //                    print("didEndEditing String \(string)")
-                //                })
-                ////                .limitInputLength(value: $text3, length: 3)
-                //                .frame(width: 40, height: 40)
-                //                .onHover(perform: { hovering in
-                //                    print("hovering \(hovering)")
-                //                    isHovering3 = hovering
-                //                })
-                //                .background(.white)
-                //                DidEndEditingTextField(tag: 3, text: $text4, isHovering: $isHovering4, didEndEditing: { string in
-                //                    print("didEndEditing String \(string)")
-                //                })
-                ////                .limitInputLength(value: $text4, length: 3)
-                //                .frame(width: 40, height: 40)
-                //                .onHover(perform: { hovering in
-                //                    print("hovering \(hovering)")
-                //                    isHovering4 = hovering
-                //                })
-                //                .background(.green)
+//                applyPinCodeModifier(isFocusing: triggersFocus4)
             }
             .padding()
+//            .overlay(
+//                RoundedRectangle(cornerRadius: 16)
+//                    .strokeBorder(Color.gray)
+//            )
             Button("Button") {
                 print("onSubmit text1 \(text1) -- text2 \(text2) -- text3 \(text3) -- text4 \(text4)")
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(.white)
+        .onTapGesture {
+            print("onTapGesture")
+            DispatchQueue.main.async {
+//                triggersFocus1 = false
+//                triggersFocus2 = false
+//                triggersFocus3 = false
+//                triggersFocus4 = false
+                NSApp.keyWindow?.makeFirstResponder(nil)
             }
         }
     }
@@ -212,7 +179,7 @@ class FocusAwareTextField: NSTextField {
     
     override func becomeFirstResponder() -> Bool {
         let textView = window?.fieldEditor(true, for: nil) as? NSTextView
-        textView?.insertionPointColor = NSColor.systemPink // R.nsColor.action
+        textView?.insertionPointColor = NSColor.black // R.nsColor.action
         onFocusChange(true)
         return super.becomeFirstResponder()
     }
@@ -223,9 +190,22 @@ struct DidEndEditingTextField: NSViewRepresentable {
     let placeholder: String
     var limit: Int = -1
     let digitOnly: Bool
+    
+    let placeholderFont: NSFont = NSFont.systemFont(ofSize: 15)
+    let textFieldFont: NSFont = NSFont.systemFont(ofSize: 15)
+    
+    let placeholderTextColor: NSColor = NSColor(hex: Color.hintTextColor)
+    
+    let normalTextColorNotSelecting: NSColor = NSColor(hex: Color.normalTextColorNotSelecting)
+    let hoverTextColor: NSColor = NSColor(hex: Color.hoverTextColor)
+    let normalTextColorSelecting: NSColor = NSColor(hex: Color.normalTextColorSelecting)
+    let dimTextColor: NSColor = NSColor(hex: Color.dimTextColor)
+    
+    var textAlignment: NSTextAlignment = .center
     @Binding var text: String
     @Binding var isFocus: Bool
     @Binding var triggersFocus: Bool
+    @Binding var isHovering: Bool
     var onDeleteBackward: () -> Void
     var onReturnKey: () -> Void = {}
     var shouldMoveToNextFocusWhenReachedLimit: () -> Void
@@ -239,17 +219,23 @@ struct DidEndEditingTextField: NSViewRepresentable {
     func makeNSView(context: Context) -> NSTextField {
         let textField = FocusAwareTextField()
         textField.tag = tag
+        let centeredParagraphStyle = NSMutableParagraphStyle()
+        centeredParagraphStyle.alignment = textAlignment
         textField.placeholderAttributedString = NSAttributedString(
             string: placeholder,
             attributes: [
-                NSAttributedString.Key.foregroundColor: NSColor.gray,
+                NSAttributedString.Key.foregroundColor: placeholderTextColor,
+                NSAttributedString.Key.paragraphStyle: centeredParagraphStyle,
+                NSAttributedString.Key.font: placeholderFont
             ]
         )
+        textField.textColor = normalTextColorNotSelecting // R.nsColor.text
+        textField.font = textFieldFont
+        textField.alignment = textAlignment
         textField.isBordered = false
         textField.delegate = context.coordinator
         textField.backgroundColor = NSColor.clear
-        textField.textColor = NSColor.green // R.nsColor.text
-        textField.font = NSFont(name: "Monaco", size: 20) // R.font.text
+    // R.font.text
         textField.focusRingType = .none
         textField.onFocusChange = { isFocus in
             self.isFocus = isFocus
@@ -257,8 +243,22 @@ struct DidEndEditingTextField: NSViewRepresentable {
         return textField
     }
     
+    private func getTextColor() -> NSColor {
+        if isEnabled {
+            if isFocus {
+                return normalTextColorSelecting
+            }
+            if isHovering {
+                return hoverTextColor
+            }
+            return normalTextColorNotSelecting
+        }
+        return dimTextColor
+    }
+    
     func updateNSView(_ nsView: NSTextField, context _: Context) {
         nsView.stringValue = text
+        nsView.textColor = getTextColor()
         print("isFocus \(isFocus) --- nsview \(nsView.tag)")
         if triggersFocus {
             DispatchQueue.main.async {
@@ -510,5 +510,129 @@ extension View {
 extension String {
     var digits: String {
         return components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
+    }
+}
+extension NSColor {
+    
+    convenience init(hex: String) {
+        let trimHex = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+        let dropHash = String(trimHex.dropFirst()).trimmingCharacters(in: .whitespacesAndNewlines)
+        let hexString = trimHex.starts(with: "#") ? dropHash : trimHex
+        let ui64 = UInt64(hexString, radix: 16)
+        let value = ui64 != nil ? Int(ui64!) : 0
+        // #RRGGBB
+        var components = (
+            R: CGFloat((value >> 16) & 0xff) / 255,
+            G: CGFloat((value >> 08) & 0xff) / 255,
+            B: CGFloat((value >> 00) & 0xff) / 255,
+            a: CGFloat(1)
+        )
+        if String(hexString).count == 8 {
+            // #RRGGBBAA
+            components = (
+                R: CGFloat((value >> 24) & 0xff) / 255,
+                G: CGFloat((value >> 16) & 0xff) / 255,
+                B: CGFloat((value >> 08) & 0xff) / 255,
+                a: CGFloat((value >> 00) & 0xff) / 255
+            )
+        }
+        self.init(red: components.R, green: components.G, blue: components.B, alpha: components.a)
+    }
+}
+//
+//func toHex(alpha: Bool = false) -> String? {
+//    guard let components = cgColor.components, components.count >= 3 else {
+//        return nil
+//    }
+//    
+//    let r = Float(components[0])
+//    let g = Float(components[1])
+//    let b = Float(components[2])
+//    var a = Float(1.0)
+//    
+//    if components.count >= 4 {
+//        a = Float(components[3])
+//    }
+//    
+//    if alpha {
+//        return String(format: "%02lX%02lX%02lX%02lX", lroundf(r * 255), lroundf(g * 255), lroundf(b * 255), lroundf(a * 255))
+//    } else {
+//        return String(format: "%02lX%02lX%02lX", lroundf(r * 255), lroundf(g * 255), lroundf(b * 255))
+//    }
+//}
+//}
+
+extension Color {
+    init(hex: String) {
+        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var int: UInt64 = 0
+        Scanner(string: hex).scanHexInt64(&int)
+        // swiftlint:disable:next identifier_name
+        let a, r, g, b: UInt64
+        switch hex.count {
+        case 3: // RGB (12-bit)
+            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
+        case 6: // RGB (24-bit)
+            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
+        case 8: // ARGB (32-bit)
+            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
+        default:
+            (a, r, g, b) = (1, 1, 1, 0)
+        }
+        self.init(
+            .sRGB,
+            red: Double(r) / 255,
+            green: Double(g) / 255,
+            blue: Double(b) / 255,
+            opacity: Double(a) / 255
+        )
+    }
+}
+
+extension View {
+    func applyPinCodeModifier(isHover: Binding<Bool>, isFocusing: Bool) -> some View {
+        modifier(PinCodeModifier(isHover: isHover, isFocusing: isFocusing))
+    }
+}
+
+struct PinCodeModifier: ViewModifier {
+    @Binding var isHover: Bool
+    let isFocusing: Bool
+    @Environment(\.isEnabled) private var isEnabled
+
+    func body(content: Content) -> some View {
+        content
+            .frame(width: 40, height: 40)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(getBackgroundColor())
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .strokeBorder(getBorderColor())
+            )
+            .onHover(perform: { hovering in
+                self.isHover = hovering
+            })
+    }
+    
+    func getBackgroundColor() -> Color {
+        if isEnabled {
+            if isHover && !isFocusing {
+                return Color(hex: Color.hoverBackgroundColor)
+            }
+        }
+        return Color(hex: Color.defaultBackgroundColor)
+    }
+    
+    func getBorderColor() -> Color {
+        if isEnabled {
+            if isFocusing {
+                return Color(hex: Color.selectBorderColor)
+            } else if isHover {
+                return Color(hex: Color.hoverBorderColor)
+            }
+        }
+        return Color(hex: Color.defaultBorderColor)
     }
 }
