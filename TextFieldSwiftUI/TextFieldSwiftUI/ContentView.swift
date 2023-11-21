@@ -53,122 +53,71 @@ struct ContentView: View {
         static let pinCodePlaceholder: String = "N"
     }
     
-    func getValidIPValue(_ text: String) -> Int {
-        return min(Int(text) ?? 0, 255)
-    }
-    
     var body: some View {
         VStack {
-            HStack {
-                ESBNSTextField(tag: 0, placeholder: Constant.pinCodePlaceholder, limit: Constant.pinCodeCharacterLimit, digitOnly: true, text: $text1, isFocus: $isTextFieldFocus1, triggersFocus: $triggersFocus1, isHovering: $isHovering1, onDeleteBackward: {
+//            HStack {
+//                ESBNSTextField(tag: 0, placeholder: Constant.pinCodePlaceholder, limit: Constant.pinCodeCharacterLimit, digitOnly: true, text: $text1, isFocus: $isTextFieldFocus1, triggersFocus: $triggersFocus1, isHovering: $isHovering1, onDeleteBackward: {
+//                    print("onDeleteBackward text1")
+//                }, shouldMoveToNextFocusWhenReachedLimit: {
+//                    triggersFocus2 = true
+//                })
+//                .applyPinCodeStyleModifier(isHover: $isHovering1, isFocusing: $isTextFieldFocus1.wrappedValue)
+//                .limitInputLength(value: $text1, length: Constant.pinCodeCharacterLimit)
+//
+//                ESBNSTextField(tag: 1, placeholder: Constant.pinCodePlaceholder, limit: Constant.pinCodeCharacterLimit, digitOnly: true, text: $text2, isFocus: $isTextFieldFocus2, triggersFocus: $triggersFocus2, isHovering: $isHovering2, onDeleteBackward: {
+//                    print("onDeleteBackward text1")
+//                    triggersFocus1 = true
+//                }, shouldMoveToNextFocusWhenReachedLimit: {
+////                    triggersFocus2 = true
+//                }, onReturnKey: {
+//                    DispatchQueue.main.async {
+//                        NSApp.keyWindow?.makeFirstResponder(nil)
+//                    }
+//                })
+//                .applyPinCodeStyleModifier(isHover: $isHovering2, isFocusing: $isTextFieldFocus2.wrappedValue)
+//                .limitInputLength(value: $text2, length: Constant.pinCodeCharacterLimit)
+//            }
+            
+            HStack() {
+                ESBNSTextField(tag: 0, placeholder: Constant.ipPlaceholder, limit: Constant.ipCharacterLimit, digitOnly: true, text: $text1, isFocus: $isTextFieldFocus1, triggersFocus: $triggersFocus1, isHovering: $isHovering1, onDeleteBackward: {
                     print("onDeleteBackward text1")
                 }, shouldMoveToNextFocusWhenReachedLimit: {
                     triggersFocus2 = true
                 })
-                .applyPinCodeStyleModifier(isHover: $isHovering1, isFocusing: $isTextFieldFocus1.wrappedValue)
-                .limitInputLength(value: $text1, length: Constant.pinCodeCharacterLimit)
+                .limitIPInputLength(value: $text1, length: Constant.ipCharacterLimit)
 
-                ESBNSTextField(tag: 1, placeholder: Constant.pinCodePlaceholder, limit: Constant.pinCodeCharacterLimit, digitOnly: true, text: $text2, isFocus: $isTextFieldFocus2, triggersFocus: $triggersFocus2, isHovering: $isHovering2, onDeleteBackward: {
-                    print("onDeleteBackward text1")
+                ESBNSTextField(tag: 1, placeholder: Constant.ipPlaceholder, limit: Constant.ipCharacterLimit, digitOnly: true, text: $text2, isFocus: $isTextFieldFocus2, triggersFocus: $triggersFocus2, isHovering: $isHovering2, onDeleteBackward: {
+                    print("onDeleteBackward text2")
                     triggersFocus1 = true
                 }, shouldMoveToNextFocusWhenReachedLimit: {
-//                    triggersFocus2 = true
+                    triggersFocus3 = true
                 }, onReturnKey: {
+                    
+                })
+                .limitIPInputLength(value: $text2, length: Constant.ipCharacterLimit)
+                
+                ESBNSTextField(tag: 2, placeholder: Constant.ipPlaceholder, limit: Constant.ipCharacterLimit, digitOnly: true, text: $text3, isFocus: $isTextFieldFocus3, triggersFocus: $triggersFocus3, isHovering: $isHovering3, onDeleteBackward: {
+                    print("onDeleteBackward text3")
+                    triggersFocus2 = true
+                }, shouldMoveToNextFocusWhenReachedLimit: {
+                    triggersFocus4 = true
+                }, onReturnKey: {
+                   
+                })
+                .limitIPInputLength(value: $text3, length: Constant.ipCharacterLimit)
+                
+                ESBNSTextField(tag: 3, placeholder: Constant.ipPlaceholder, limit: Constant.ipCharacterLimit, digitOnly: true, text: $text4, isFocus: $isTextFieldFocus4, triggersFocus: $triggersFocus4, isHovering: $isHovering4, onDeleteBackward: {
+                    print("onDeleteBackward text4")
+                    triggersFocus3 = true
+                }, shouldMoveToNextFocusWhenReachedLimit: {}, onReturnKey: {
                     DispatchQueue.main.async {
                         NSApp.keyWindow?.makeFirstResponder(nil)
                     }
                 })
-                .applyPinCodeStyleModifier(isHover: $isHovering2, isFocusing: $isTextFieldFocus2.wrappedValue)
-                .limitInputLength(value: $text2, length: Constant.pinCodeCharacterLimit)
-//                .onChange(of: isTextFieldFocus2) { newValue in
-//                    print("isTextFieldFocus2 newValue \(newValue)")
-//                }
-//                .onChange(of: text1, perform: { newValue in
-//                    print("onChange text1 \(newValue)")
-//                    if newValue.isEmpty {
-//                        return
-//                    }
-//                    text1 = "\(getValidIPValue(newValue))"
-////                    if text1.count == Constant.pinCodeCharacterLimit {
-////                        if !triggersFocus2 {
-////                            triggersFocus2 = true
-////                        }
-////                    }
-//                })
-//                DidEndEditingTextField(tag: 1, placeholder: Constant.ipPlaceholder, limit: Constant.ipCharacterLimit, digitOnly: true, text: $text2, isFocus: $isTextFieldFocus2, triggersFocus: $triggersFocus2, isHovering: $isHovering2, onDeleteBackward: {
-//                    print("onDeleteBackward text2")
-//                    triggersFocus1 = true
-//                }, shouldMoveToNextFocusWhenReachedLimit: {
-//                    triggersFocus3 = true
-//                })
-//                .onChange(of: isTextFieldFocus2) { newValue in
-//                    print("isTextFieldFocus2 newValue \(newValue)")
-//                }
-//                .onChange(of: text2, perform: { newValue in
-//                    print("onChange text2 \(newValue)")
-//                    if newValue.isEmpty {
-//                        return
-//                    }
-//                    let value = Int(newValue) ?? 0
-//                    let min = min(value, 255)
-//                    text2 = "\(min)"
-//                    //          if newValue.count > 3 {
-//                    //            text3 = String(newValue.suffix(1))
-//                    //            triggersFocus3 = true
-//                    //          }
-//                })
-////                applyPinCodeModifier(isFocusing: triggersFocus2)
-//                DidEndEditingTextField(tag: 2, placeholder: Constant.ipPlaceholder, limit: Constant.ipCharacterLimit, digitOnly: true, text: $text3, isFocus: $isTextFieldFocus3, triggersFocus: $triggersFocus3, isHovering: $isHovering3, onDeleteBackward: {
-//                    print("onDeleteBackward text3")
-//                    triggersFocus2 = true
-//                }, shouldMoveToNextFocusWhenReachedLimit: {
-//                    triggersFocus4 = true
-//                })
-//                .onChange(of: isTextFieldFocus3) { newValue in
-//                    print("isTextFieldFocus3 newValue \(newValue)")
-//                }
-//                .onChange(of: text3, perform: { newValue in
-//                    print("onChange text3 \(newValue)")
-//                    if newValue.isEmpty {
-//                        return
-//                    }
-//                    let value = Int(newValue) ?? 0
-//                    let min = min(value, 255)
-//                    text3 = "\(min)"
-////                    if newValue.count > 3 {
-////                        text4 = String(newValue.suffix(1))
-////                        triggersFocus4 = true
-////                    }
-//                })
-////                applyPinCodeModifier(isFocusing: triggersFocus3)
-//                DidEndEditingTextField(tag: 3, placeholder: Constant.ipPlaceholder, limit: Constant.ipCharacterLimit, digitOnly: true, text: $text4, isFocus: $isTextFieldFocus4, triggersFocus: $triggersFocus4, isHovering: $isHovering4, onDeleteBackward: {
-//                    print("onDeleteBackward text4")
-//                    triggersFocus3 = true
-//                }, shouldMoveToNextFocusWhenReachedLimit: {
-//                    
-//                })
-//                .onSubmit {
-//                    print("onSubmit text1 \(text1) -- text2 \(text2) -- text3 \(text3) -- text4 \(text4)")
-//                }
-//                .onChange(of: isTextFieldFocus4) { newValue in
-//                    print("isTextFieldFocus4 newValue \(newValue)")
-//                }
-//                .onChange(of: text4, perform: { newValue in
-//                    print("onChange text4 \(newValue)")
-//                    if newValue.isEmpty {
-//                        return
-//                    }
-//                    let value = Int(newValue) ?? 0
-//                    let min = min(value, 255)
-//                    text4 = "\(min)"
-//                })
-//                applyPinCodeModifier(isFocusing: triggersFocus4)
+                .limitIPInputLength(value: $text4, length: Constant.ipCharacterLimit)
             }
-            .padding()
-//            .overlay(
-//                RoundedRectangle(cornerRadius: 16)
-//                    .strokeBorder(Color.gray)
-//            )
+            .applyIPStyleModifier(isFocusing: (isTextFieldFocus1 || isTextFieldFocus2 || isTextFieldFocus3 || isTextFieldFocus4))
+
             Button("Button") {
                 print("onSubmit text1 \(text1) -- text2 \(text2) -- text3 \(text3) -- text4 \(text4)")
             }
@@ -178,14 +127,11 @@ struct ContentView: View {
         .onTapGesture {
             print("onTapGesture")
             DispatchQueue.main.async {
-//                triggersFocus1 = false
-//                triggersFocus2 = false
-//                triggersFocus3 = false
-//                triggersFocus4 = false
                 NSApp.keyWindow?.makeFirstResponder(nil)
             }
         }
     }
+    
 }
 
 private class FocusAwareTextField: NSTextField {
@@ -193,7 +139,7 @@ private class FocusAwareTextField: NSTextField {
     
     override func becomeFirstResponder() -> Bool {
         let textView = window?.fieldEditor(true, for: nil) as? NSTextView
-        textView?.insertionPointColor = NSColor.black // R.nsColor.action
+        textView?.insertionPointColor = NSColor.black
         onFocusChange(true)
         return super.becomeFirstResponder()
     }
@@ -220,8 +166,8 @@ struct ESBNSTextField: NSViewRepresentable {
     @Binding var isFocus: Bool
     @Binding var triggersFocus: Bool
     @Binding var isHovering: Bool
-    var onDeleteBackward: () -> Void
-    var shouldMoveToNextFocusWhenReachedLimit: () -> Void
+    var onDeleteBackward: () -> Void = {}
+    var shouldMoveToNextFocusWhenReachedLimit: () -> Void = {}
     var onReturnKey: () -> Void = {}
 
     @Environment(\.isEnabled) private var isEnabled
@@ -243,13 +189,12 @@ struct ESBNSTextField: NSViewRepresentable {
                 NSAttributedString.Key.font: placeholderFont
             ]
         )
-        textField.textColor = normalTextColorNotSelecting // R.nsColor.text
+        textField.textColor = normalTextColorNotSelecting
         textField.font = textFieldFont
         textField.alignment = textAlignment
         textField.isBordered = false
         textField.delegate = context.coordinator
         textField.backgroundColor = NSColor.clear
-    // R.font.text
         textField.focusRingType = .none
         textField.onFocusChange = { isFocus in
             self.isFocus = isFocus
@@ -323,7 +268,7 @@ struct ESBNSTextField: NSViewRepresentable {
                 return true
             } else  if (commandSelector == #selector(NSResponder.insertNewline(_:))) {
                 //Do something against ENTER key
-                print("insertNewline")
+                print("ENTER")
                 parent.onReturnKey()
                 return true
             }
@@ -493,10 +438,43 @@ struct TextFieldLimitModifier: ViewModifier {
     }
 }
 
+struct TextFieldIPLimitModifier: ViewModifier {
+    @Binding var value: String
+    var length: Int
+
+    private func getValidIPValue(_ text: String) -> Int {
+        return min(Int(text) ?? 0, 255)
+    }
+    
+    func body(content: Content) -> some View {
+        if #available(iOS 14, *) {
+            content
+                .onChange(of: $value.wrappedValue) {
+                    if value.isEmpty {
+                        return
+                    }
+                    value = "\(getValidIPValue(String($0.prefix(length))))"
+                }
+        } else {
+            content
+                .onReceive(Just(value)) {
+                    if value.isEmpty {
+                        return
+                    }
+                    value = "\(getValidIPValue(String($0.prefix(length))))"
+                }
+        }
+    }
+}
+
 extension View {
     func limitInputLength(value: Binding<String>, length: Int) -> some View {
         self.modifier(TextFieldLimitModifier(value: value, length: length))
     }
+    
+//    func limitIPInputLength(value: Binding<String>, length: Int) -> some View {
+//        self.modifier(TextFieldLimitModifier(value: value, length: length))
+//    }
 }
 //
 //
@@ -608,6 +586,10 @@ extension View {
     func applyPinCodeStyleModifier(isHover: Binding<Bool>, isFocusing: Bool) -> some View {
         modifier(PinCodeStyleModifier(isHover: isHover, isFocusing: isFocusing))
     }
+    
+    func applyIPStyleModifier(isFocusing: Bool) -> some View {
+        modifier(IPTextFieldStyleModifier(isFocusing: isFocusing))
+    }
 }
 
 struct PinCodeStyleModifier: ViewModifier {
@@ -652,6 +634,49 @@ struct PinCodeStyleModifier: ViewModifier {
     }
 }
 
+struct IPTextFieldStyleModifier: ViewModifier {
+    @State private var isHover: Bool = false
+    let isFocusing: Bool
+    @Environment(\.isEnabled) private var isEnabled
+
+    func body(content: Content) -> some View {
+        content
+            .frame(width: 226, height: 32)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(getBackgroundColor())
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .strokeBorder(getBorderColor())
+            )
+            .onHover(perform: { hovering in
+                self.isHover = hovering
+            })
+    }
+    
+    func getBackgroundColor() -> Color {
+        if isEnabled {
+            if isHover && !isFocusing {
+                return Color(hex: Color.hoverBackgroundColor)
+            }
+        }
+        return Color(hex: Color.defaultBackgroundColor)
+    }
+    
+    func getBorderColor() -> Color {
+        if isEnabled {
+            if isFocusing {
+                return Color(hex: Color.selectBorderColor)
+            } else if isHover {
+                return Color(hex: Color.hoverBorderColor)
+            }
+        }
+        return Color(hex: Color.defaultBorderColor)
+    }
+}
+
+
 //struct TextFieldLimitModifier: ViewModifier {
 //    @Binding var value: String
 //    let length: Int
@@ -672,11 +697,11 @@ struct PinCodeStyleModifier: ViewModifier {
 //}
 
 extension View {
-    func limitPinCodeInputLength(value: Binding<String>, length: Int = 1) -> some View {
+    func limitPinCodeInputLength(value: Binding<String>, length: Int) -> some View {
         self.modifier(TextFieldLimitModifier(value: value, length: length))
     }
     
-    func limitIPInputLength(value: Binding<String>, length: Int = 3) -> some View {
-        self.modifier(TextFieldLimitModifier(value: value, length: length))
+    func limitIPInputLength(value: Binding<String>, length: Int) -> some View {
+        self.modifier(TextFieldIPLimitModifier(value: value, length: length))
     }
 }
